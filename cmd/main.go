@@ -83,6 +83,10 @@ func setIcon(iconName string, configFile string, settings *AppSettings, active .
 
 func onReady() {
 	go func() {
+		if !robotgo.IsValid() {
+			robotgo.Alert("Please give accessibility access to amm using Apple Settings and restart amm. If already done but still displays this error, remove accessibility access for amm using - (minus) sign on accessibility settings, and then restart amm", "OK", "")
+			systray.Quit()
+		}
 		err := configdir.MakePath(configPath)
 		if err != nil {
 			panic(err)
