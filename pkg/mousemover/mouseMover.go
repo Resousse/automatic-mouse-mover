@@ -71,7 +71,7 @@ func (m *MouseMover) run(heartbeatCh chan *tracker.Heartbeat, activityTracker *t
 							state.updateLastErrorTime(time.Now())
 							msg := fmt.Sprintf("Mouse pointer cannot be moved at %v. Last moved at %v. Happened %v times. (Only notifies once every 24 hours.) See README for details.",
 								time.Now(), state.getLastMouseMovedTime(), state.getDidNotMoveCount())
-							logger.Errorf(msg)
+							logger.Error(msg)
 							if state.getDidNotMoveCount() >= 10 && (time.Since(state.lastErrorTime).Hours() > 24) { //show only 1 error in a 24 hour window
 								go func() {
 									robotgo.Alert("Error with Automatic Mouse Mover", msg)
