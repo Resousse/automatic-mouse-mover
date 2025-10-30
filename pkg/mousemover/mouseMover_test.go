@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/prashantgupta24/activity-tracker/pkg/activity"
-	"github.com/prashantgupta24/activity-tracker/pkg/tracker"
+	"github.com/resousse/activity-tracker/pkg/activity"
+	"github.com/resousse/activity-tracker/pkg/tracker"
 )
 
 type TestMover struct {

@@ -3,7 +3,7 @@ COVER_HTML=cover.html
 
 .PHONY: $(COVER_PROFILE) $(COVER_HTML)
 
-all: open
+all: package
 
 build: clean
 	mkdir -p -v ./bin/amm.app/Contents/Resources/assets/icon
@@ -13,8 +13,9 @@ build: clean
 	cp ./assets/icon/* ./bin/amm.app/Contents/Resources/assets/icon
 	go build -o ./bin/amm.app/Contents/MacOS/amm cmd/main.go
 
-open: build
-	open ./bin
+package: build
+	ln -s /Applications ./bin/Applications
+	hdiutil create -volname "Automatic Mouse Mover" -srcfolder ./bin -ov -format UDZO AutomaticMouseMover.dmg
 
 clean:
 	rm -rf ./bin

@@ -9,10 +9,10 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/Resousse/automatic-mouse-mover/pkg/mousemover"
 	"github.com/getlantern/systray"
 	"github.com/go-vgo/robotgo"
 	"github.com/kirsle/configdir"
-	"github.com/prashantgupta24/automatic-mouse-mover/pkg/mousemover"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -169,7 +169,7 @@ func onReady() {
 				setIcon("geometric", configFile, &settings, ammStart.Disabled())
 			case <-about.ClickedCh:
 				log.Infof("Requesting about")
-				robotgo.Alert("Automatic-mouse-mover app v1.3.1", "Developed by Prashant Gupta. \n\nMore info at: https://github.com/prashantgupta24/automatic-mouse-mover", "OK", "")
+				robotgo.Alert("Automatic-mouse-mover app v1.3.2", "Created by Prashant Gupta. \n\nMore info at: https://github.com/resousse/automatic-mouse-mover", "OK", "")
 			}
 		}
 

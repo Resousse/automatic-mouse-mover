@@ -1,5 +1,3 @@
-**Note: Known issues with MacOS Sonoma, will work on a fix asap**
-
 # Presenting the minimalistic Automatic-Mouse-Mover(AMM) app!
 
 [![version][version-badge]][releases] [![Go Report Card](https://goreportcard.com/badge/github.com/Resousse/automatic-mouse-mover)](https://goreportcard.com/report/github.com/Resousse/automatic-mouse-mover) [![godoc-badge][godoc-badge]][godoc-link] [![codecov](https://codecov.io/gh/Resousse/automatic-mouse-mover/branch/master/graph/badge.svg)](https://codecov.io/gh/Resousse/automatic-mouse-mover)
@@ -88,7 +86,7 @@ If you still see the error, try to quit and start the app again (the age-old way
 
 ## How it works
 
-Every 60 seconds, AMM uses [Activity tracker](https://github.com/prashantgupta24/activity-tracker) to track the various changes that happened in your system during that time, like cursor movement, mouse clicks, screen changes etc. Whenever `AMM` detects a change in the system, it knows that the system is busy and will not do anything. If not, it moves the mouse cursor ever so slightly, enough to keep your Mac awake for eternity.
+Every 60 seconds, AMM uses [Activity tracker](https://github.com/resousse/activity-tracker) to track the various changes that happened in your system during that time, like cursor movement, mouse clicks, screen changes etc. Whenever `AMM` detects a change in the system, it knows that the system is busy and will not do anything. If not, it moves the mouse cursor ever so slightly, enough to keep your Mac awake for eternity.
 
 > All code is public and open-sourced so no worrying if there's nefarious intention involved in recording your activity or not.
 
@@ -99,4 +97,4 @@ Every 60 seconds, AMM uses [Activity tracker](https://github.com/prashantgupta24
 
 ## Contributions welcome!
 
-Please feel free to contribute and make this open source app even better! Adding more pluggable activities to [Activity tracker](https://github.com/prashantgupta24/activity-tracker) will make sure that AMM works even better!
+Please feel free to contribute and make this open source app even better! Adding more pluggable activities to [Activity tracker](https://github.com/resousse/activity-tracker) will make sure that AMM works even better!
