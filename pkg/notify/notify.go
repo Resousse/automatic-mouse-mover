@@ -6,7 +6,7 @@ import (
 	gosxnotifier "github.com/deckarep/gosx-notifier"
 )
 
-//SendMessage to OSX notification centre
+// SendMessage to OSX notification centre
 func SendMessage(msg string) {
 	note := gosxnotifier.NewNotification(msg)
 	err := note.Push()

@@ -1,10 +1,12 @@
 # Presenting the minimalistic Automatic-Mouse-Mover(AMM) app!
 
-[![version][version-badge]][releases] [![Go Report Card](https://goreportcard.com/badge/github.com/prashantgupta24/automatic-mouse-mover)](https://goreportcard.com/report/github.com/prashantgupta24/automatic-mouse-mover) [![godoc-badge][godoc-badge]][godoc-link] [![codecov](https://codecov.io/gh/prashantgupta24/automatic-mouse-mover/branch/master/graph/badge.svg)](https://codecov.io/gh/prashantgupta24/automatic-mouse-mover)
+[![version][version-badge]][releases] [![Go Report Card](https://goreportcard.com/badge/github.com/Resousse/automatic-mouse-mover)](https://goreportcard.com/report/github.com/Resousse/automatic-mouse-mover) [![godoc-badge][godoc-badge]][godoc-link] [![codecov](https://codecov.io/gh/Resousse/automatic-mouse-mover/branch/master/graph/badge.svg)](https://codecov.io/gh/Resousse/automatic-mouse-mover)
 
 Ever felt the need to keep your machine awake without actually having to move the mouse pointer manually at regular intervals? **Well, not anymore!**
 
 Introducing the simplest app that has the sole purpose of **moving your mouse pointer at regular intervals so that your machine is kept awake!** And best of all, it works **ONLY** when you are not working, so be rest assured that the mouse won't start moving on its own without the machine actually being idle.
+
+This application has been initially created by **@prashantgupta24**, but he won't get any feature improvement.
 
 **Table of contents**
 
@@ -48,13 +50,13 @@ Since this app actively keeps your machine awake, your messaging app will never 
 
 You just click on `Start`, and AMM will take care of moving your mouse whenever it feels that the system has been left idle for a minute. It's as simple as this.
 
-![](https://github.com/prashantgupta24/automatic-mouse-mover/blob/master/resources/amm-demo.gif)
+![](resources/amm-demo.gif)
 
 ## How to install
 
 ### Install from binary
 
-1. Download the latest `amm.app.zip` from the [releases](https://github.com/prashantgupta24/automatic-mouse-mover/releases) page, unzip it, and copy the .app to your `Applications` folder like any other application.
+1. Download the latest `amm.app.zip` from the [releases](https://github.com/Resousse/automatic-mouse-mover/releases) page, unzip it, and copy the .app to your `Applications` folder like any other application.
 
 1. Since the application is not notarized, you will need to right click on the .app and choose Open.
 
@@ -72,7 +74,7 @@ Double click on the app, and the cute `mouse` should appear on your taskbar on t
 
 While starting the app, you might see a message like the one below or an error stating `Mouse pointer cannot be moved`.
 
-![](https://github.com/prashantgupta24/automatic-mouse-mover/blob/master/resources/request.jpg)
+![](resources/request.jpg)
 
 Don't worry, it's nothing sinister, it's just that Mac doesn't allow apps to gain accessibility to the computer by default (even standard apps like Automator, Firefox etc. who might want to access some features need to go through the same process).
 
@@ -88,10 +90,10 @@ Every 60 seconds, AMM uses [Activity tracker](https://github.com/prashantgupta24
 
 > All code is public and open-sourced so no worrying if there's nefarious intention involved in recording your activity or not.
 
-[version-badge]: https://img.shields.io/github/release/prashantgupta24/automatic-mouse-mover.svg
-[releases]: https://github.com/prashantgupta24/automatic-mouse-mover/releases
+[version-badge]: https://img.shields.io/github/release/Resousse/automatic-mouse-mover.svg
+[releases]: https://github.com/Resousse/automatic-mouse-mover/releases
 [godoc-badge]: https://img.shields.io/badge/godoc-reference-blue.svg
-[godoc-link]: https://godoc.org/github.com/prashantgupta24/automatic-mouse-mover/pkg/mousemover
+[godoc-link]: https://godoc.org/github.com/Resousse/automatic-mouse-mover/pkg/mousemover
 
 ## Contributions welcome!
 

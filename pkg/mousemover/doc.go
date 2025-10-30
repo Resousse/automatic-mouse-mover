@@ -7,18 +7,17 @@ pointer at regular intervals so that your machine never sleeps! And best of all,
 ONLY when you are not working, so be rest assured that the mouse won't start moving on its
 own without the machine actually being idle.
 
+# Installation
 
-Installation
+The library can be installed using:
 
-The libary can be installed using:
- go get -u github.com/automatic-mouse-mover/pkg/mousemover
+	go get -u github.com/automatic-mouse-mover/pkg/mousemover
 
-Usage
+# Usage
 
 Clone this repo and run Make, it should create the amm.app and open the folder where
 it was built for you. You just have to drag and drop it to the Applications folder on your mac.
 
 Refer to the README for more details.
-
 */
 package mousemover
