@@ -32,7 +32,7 @@ func getIcon(iconName string, active bool) []byte {
 		iconName = "mouse"
 	}
 	var b []byte
-	var err error
+	var err *error
 	ex, _ := os.Executable()
 	exPath := filepath.Dir(ex)
 
