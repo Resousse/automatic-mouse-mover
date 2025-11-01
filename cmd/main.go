@@ -144,7 +144,6 @@ func onReady() {
 				mouseMover.Start()
 				ammStart.Disable()
 				ammStop.Enable()
-				//notify.SendMessage("starting the app")
 				setIcon(settings.Icon, configFile, &settings, true)
 
 			case <-ammStop.ClickedCh:

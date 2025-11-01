@@ -177,3 +177,42 @@ func (suite *TestMover) TestMouseMoveFailure() {
 	assert.NotEqual(t, state.getDidNotMoveCount(), 0, "should not be 0")
 	assert.NotEqual(t, state.getLastErrorTime(), 0, "should not be 0")
 }
+
+func (suite *TestMover) TestGetInstanceReset() {
+	t := suite.T()
+	// ensure a fresh singleton is created after reset
+	instance = nil
+	m1 := GetInstance()
+	assert.NotNil(t, m1, "GetInstance should return an instance")
+	m2 := GetInstance()
+	assert.Equal(t, m1, m2, "GetInstance should return the same singleton")
+}
+
+func (suite *TestMover) TestQuitIdempotentBuffered() {
+	t := suite.T()
+	mouseMover := GetInstance()
+	mouseMover.state.updateRunningStatus(true)
+	mouseMover.quit = make(chan struct{}, 1)
+
+	tmpFile, err := os.CreateTemp("", "amm-log-*")
+	assert.NoError(t, err, "should create temp file")
+	mouseMover.logFile = tmpFile
+
+	mouseMover.Quit()
+	assert.False(t, mouseMover.state.isRunning(), "state should not be running after Quit")
+	mouseMover.Quit()
+	tmpFile.Close()
+	os.Remove(tmpFile.Name())
+}
+
+func (suite *TestMover) TestRunPreventsMultipleStarts() {
+	t := suite.T()
+	mouseMover := GetInstance()
+
+	// simulate already running
+	mouseMover.state.updateRunningStatus(true)
+
+	// calling run when already running should return immediately and not change running state
+	mouseMover.run(suite.heartbeatCh, suite.activityTracker)
+	assert.True(t, mouseMover.state.isRunning(), "state should remain running after calling run again")
+}

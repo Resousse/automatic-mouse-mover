@@ -111,6 +111,7 @@ func (m *MouseMover) run(heartbeatCh chan *tracker.Heartbeat, activityTracker *t
 func (m *MouseMover) Quit() {
 	//making it idempotent
 	if m != nil && m.state.isRunning() {
+		m.state.updateRunningStatus(false)
 		m.quit <- struct{}{}
 	}
 	if m.logFile != nil {

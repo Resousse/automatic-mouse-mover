@@ -3,7 +3,6 @@ module github.com/Resousse/automatic-mouse-mover
 go 1.25.3
 
 require (
-	github.com/deckarep/gosx-notifier v0.0.0-20180201035817-e127226297fb
 	github.com/getlantern/systray v1.2.2
 	github.com/go-vgo/robotgo v0.110.8
 	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
@@ -14,7 +13,7 @@ require (
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dblohm7/wingoes v0.0.0-20240820181039-f2b84150679e // indirect
+	github.com/dblohm7/wingoes v0.0.0-20250822163801-6d8e6105c62d // indirect
 	github.com/ebitengine/purego v0.9.0 // indirect
 	github.com/gen2brain/shm v0.1.1 // indirect
 	github.com/getlantern/context v0.0.0-20220418194847-3d5e7a086201 // indirect
@@ -38,8 +37,8 @@ require (
 	github.com/robotn/gohook v0.42.2 // indirect
 	github.com/robotn/xgb v0.10.0 // indirect
 	github.com/robotn/xgbutil v0.10.0 // indirect
-	github.com/shirou/gopsutil/v4 v4.25.9 // indirect
-	github.com/tailscale/win v0.0.0-20250213223159-5992cb43ca35 // indirect
+	github.com/shirou/gopsutil/v4 v4.25.10 // indirect
+	github.com/tailscale/win v0.0.0-20250627215312-f4da2b8ee071 // indirect
 	github.com/tklauser/go-sysconf v0.3.15 // indirect
 	github.com/tklauser/numcpus v0.10.0 // indirect
 	github.com/vcaesar/gops v0.41.0 // indirect
@@ -54,7 +53,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.38.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
+	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546 // indirect
 	golang.org/x/image v0.32.0 // indirect
 	golang.org/x/sys v0.37.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
