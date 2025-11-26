@@ -60,7 +60,7 @@ func TestGetIconOriginalAndInvalidName(t *testing.T) {
 	}
 
 	// call getIcon for valid name, inactive
-	b := getIcon("mouse", false)
+	b := getIcon("mouse", false, "")
 	if len(b) == 0 {
 		t.Fatalf("getIcon returned empty bytes")
 	}
@@ -79,7 +79,7 @@ func TestGetIconOriginalAndInvalidName(t *testing.T) {
 	}
 
 	// calling with invalid name must default to mouse -> validate pixel
-	b2 := getIcon("invalid-name", false)
+	b2 := getIcon("invalid-name", false, "")
 	img2, err := png.Decode(bytes.NewReader(b2))
 	if err != nil {
 		t.Fatalf("decode invalid-name returned bytes error: %v", err)
@@ -112,7 +112,7 @@ func TestGetIconActiveRecolors(t *testing.T) {
 	}
 
 	// call getIcon with active=true
-	b := getIcon("mouse", true)
+	b := getIcon("mouse", true, "")
 	if len(b) == 0 {
 		t.Fatalf("getIcon active returned empty bytes")
 	}

@@ -14,8 +14,10 @@ build: clean
 	go build -o ./bin/amm.app/Contents/MacOS/amm cmd/main.go
 
 package: build
+	rm -f ./bin/AutomaticMouseMover.dmg
 	ln -s /Applications ./bin/Applications
 	hdiutil create -volname "Automatic Mouse Mover" -srcfolder ./bin -ov -format UDZO AutomaticMouseMover.dmg
+	mv AutomaticMouseMover.dmg ./bin/
 
 clean:
 	rm -rf ./bin

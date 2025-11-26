@@ -17,7 +17,8 @@ import (
 )
 
 type AppSettings struct {
-	Icon string `json:"icon"`
+	Icon  string `json:"icon"`
+	Color string `json:"color"`
 }
 
 var configPath = configdir.LocalConfig("amm")
@@ -27,7 +28,7 @@ func main() {
 	systray.Run(onReady, onExit)
 }
 
-func getIcon(iconName string, active bool) []byte {
+func getIcon(iconName string, active bool, col string) []byte {
 	if iconName != "mouse" && iconName != "cloud" && iconName != "geometric" && iconName != "man" {
 		iconName = "mouse"
 	}
@@ -54,7 +55,14 @@ func getIcon(iconName string, active bool) []byte {
 			for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
 				r, g, b, a := img.At(x, y).RGBA()
 				if a != 0 {
-					dimg.Set(x, y, color.RGBA{30, 144, 255, 255})
+					if col == "white" {
+						dimg.Set(x, y, color.RGBA{255, 255, 255, 255})
+					} else if col == "red" {
+						dimg.Set(x, y, color.RGBA{255, 0, 0, 255})
+					} else {
+						dimg.Set(x, y, color.RGBA{30, 144, 255, 255})
+					}
+
 				} else {
 					dimg.Set(x, y, color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)})
 				}
@@ -68,11 +76,11 @@ func getIcon(iconName string, active bool) []byte {
 
 }
 
-func setIcon(iconName string, configFile string, settings *AppSettings, active ...bool) {
-	systray.SetIcon(getIcon(iconName, len(active) != 0 && active[0]))
+func setIcon(iconName string, color string, configFile string, settings *AppSettings, active ...bool) {
+	systray.SetIcon(getIcon(iconName, len(active) != 0 && active[0], color))
 	if configFile != "" {
 
-		*settings = AppSettings{iconName}
+		*settings = AppSettings{iconName, color}
 		fh, _ := os.Create(configFile)
 		defer fh.Close()
 
@@ -88,7 +96,7 @@ func onReady() {
 			panic(err)
 		}
 		var settings AppSettings
-		settings = AppSettings{"mouse"}
+		settings = AppSettings{"mouse", "blue"}
 
 		if _, err = os.Stat(configFile); os.IsNotExist(err) {
 			fh, err := os.Create(configFile)
@@ -118,16 +126,21 @@ func onReady() {
 		icons := systray.AddMenuItem("Icons", "icon of the app")
 		mouse := icons.AddSubMenuItem("Mouse", "Mouse icon")
 
-		mouse.SetIcon(getIcon("mouse", false))
+		mouse.SetIcon(getIcon("mouse", false, ""))
 		cloud := icons.AddSubMenuItem("Cloud", "Cloud icon")
-		cloud.SetIcon(getIcon("cloud", false))
+		cloud.SetIcon(getIcon("cloud", false, ""))
 		man := icons.AddSubMenuItem("Man", "Man icon")
-		man.SetIcon(getIcon("man", false))
+		man.SetIcon(getIcon("man", false, ""))
 		geometric := icons.AddSubMenuItem("Geometric", "Geometric")
-		geometric.SetIcon(getIcon("geometric", false))
+		geometric.SetIcon(getIcon("geometric", false, ""))
+
+		colors := systray.AddMenuItem("Icon Colors", "")
+		blue := colors.AddSubMenuItem("Blue 🔵", "Blue")
+		white := colors.AddSubMenuItem("White ⚪️", "White")
+		red := colors.AddSubMenuItem("Red 🔴", "Red")
 
 		ammStop.Disable()
-		setIcon(settings.Icon, "", &settings, true)
+		setIcon(settings.Icon, settings.Color, "", &settings, true)
 		systray.AddSeparator()
 		mQuit := systray.AddMenuItem("Quit", "Quit the whole app")
 		// Sets the icon of a menu item. Only available on Mac.
@@ -144,14 +157,14 @@ func onReady() {
 				mouseMover.Start()
 				ammStart.Disable()
 				ammStop.Enable()
-				setIcon(settings.Icon, configFile, &settings, true)
+				setIcon(settings.Icon, settings.Color, configFile, &settings, true)
 
 			case <-ammStop.ClickedCh:
 				log.Infof("stopping the app")
 				ammStart.Enable()
 				ammStop.Disable()
 				mouseMover.Quit()
-				setIcon(settings.Icon, configFile, &settings, false)
+				setIcon(settings.Icon, settings.Color, configFile, &settings, false)
 
 			case <-mQuit.ClickedCh:
 				log.Infof("Requesting quit")
@@ -159,16 +172,22 @@ func onReady() {
 				systray.Quit()
 				return
 			case <-mouse.ClickedCh:
-				setIcon("mouse", configFile, &settings, ammStart.Disabled())
+				setIcon("mouse", settings.Color, configFile, &settings, ammStart.Disabled())
 			case <-cloud.ClickedCh:
-				setIcon("cloud", configFile, &settings, ammStart.Disabled())
+				setIcon("cloud", settings.Color, configFile, &settings, ammStart.Disabled())
 			case <-man.ClickedCh:
-				setIcon("man", configFile, &settings, ammStart.Disabled())
+				setIcon("man", settings.Color, configFile, &settings, ammStart.Disabled())
 			case <-geometric.ClickedCh:
-				setIcon("geometric", configFile, &settings, ammStart.Disabled())
+				setIcon("geometric", settings.Color, configFile, &settings, ammStart.Disabled())
+			case <-blue.ClickedCh:
+				setIcon(settings.Icon, "blue", configFile, &settings, ammStart.Disabled())
+			case <-red.ClickedCh:
+				setIcon(settings.Icon, "red", configFile, &settings, ammStart.Disabled())
+			case <-white.ClickedCh:
+				setIcon(settings.Icon, "white", configFile, &settings, ammStart.Disabled())
 			case <-about.ClickedCh:
 				log.Infof("Requesting about")
-				robotgo.Alert("Automatic-mouse-mover app v1.3.2", "Created by Prashant Gupta. \n\nMore info at: https://github.com/resousse/automatic-mouse-mover", "OK", "")
+				robotgo.Alert("Automatic-mouse-mover app v1.3.3", "Created by Prashant Gupta. \n\nMore info at: https://github.com/resousse/automatic-mouse-mover", "OK", "")
 			}
 		}
 
