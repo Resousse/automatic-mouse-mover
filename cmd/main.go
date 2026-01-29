@@ -24,28 +24,53 @@ type AppSettings struct {
 var configPath = configdir.LocalConfig("amm")
 var configFile = filepath.Join(configPath, "settings.json")
 
+const alphaInactive = 0.6
+
+var (
+	colorBlue  = color.RGBA{30, 144, 255, 255}
+	colorRed   = color.RGBA{255, 0, 0, 255}
+	colorWhite = color.RGBA{255, 255, 255, 255}
+)
+
 func main() {
 	systray.Run(onReady, onExit)
 }
 
-func getIcon(iconName string, active bool, col string) []byte {
+func loadIconFile(iconName string) []byte {
 	if iconName != "mouse" && iconName != "cloud" && iconName != "geometric" && iconName != "man" {
 		iconName = "mouse"
 	}
-	var b []byte
-	var err *error
+	iconPaths := []string{}
+	if base := os.Getenv("AMM_ICON_DIR"); base != "" {
+		iconPaths = append(iconPaths, filepath.Join(base, "assets", "icon", iconName+".png"))
+	}
 	ex, _ := os.Executable()
 	exPath := filepath.Dir(ex)
+	iconPaths = append(iconPaths,
+		exPath+"/../Resources/assets/icon/"+iconName+".png",
+		exPath+"/../assets/icon/"+iconName+".png",
+		"./assets/icon/"+iconName+".png",
+	)
 
-	if _, err := os.Stat(exPath + "/../Resources/assets/icon"); os.IsNotExist(err) {
-		b, err = os.ReadFile(exPath + "/../assets/icon/" + iconName + ".png")
-	} else {
-		b, err = os.ReadFile(exPath + "/../Resources/assets/icon/" + iconName + ".png")
+	for _, iconPath := range iconPaths {
+		if _, err := os.Stat(iconPath); err == nil {
+			b, err := os.ReadFile(iconPath)
+			if err == nil && len(b) > 0 {
+				return b
+			}
+		}
 	}
-	if err != nil {
-		panic(err)
-	}
-	if active {
+	panic("Failed to load icon: " + iconName + ".png")
+}
+
+func getMenuIcon(iconName string) []byte {
+	return loadIconFile(iconName)
+}
+
+func getTrayIcon(iconName string, active bool, col string) []byte {
+	b := loadIconFile(iconName)
+	
+	if active && col != "" {
 		img, err := png.Decode(bytes.NewReader(b))
 		if err != nil {
 			log.Fatalln(err)
@@ -55,14 +80,14 @@ func getIcon(iconName string, active bool, col string) []byte {
 			for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
 				r, g, b, a := img.At(x, y).RGBA()
 				if a != 0 {
-					if col == "white" {
-						dimg.Set(x, y, color.RGBA{255, 255, 255, 255})
-					} else if col == "red" {
-						dimg.Set(x, y, color.RGBA{255, 0, 0, 255})
-					} else {
-						dimg.Set(x, y, color.RGBA{30, 144, 255, 255})
+					switch col {
+						case "white":
+							dimg.Set(x, y, colorWhite)
+						case "red":
+							dimg.Set(x, y, colorRed)
+						default:
+							dimg.Set(x, y, colorBlue)
 					}
-
 				} else {
 					dimg.Set(x, y, color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)})
 				}
@@ -72,18 +97,46 @@ func getIcon(iconName string, active bool, col string) []byte {
 		png.Encode(&c, dimg)
 		return c.Bytes()
 	}
+	
+	if !active {
+		img, err := png.Decode(bytes.NewReader(b))
+		if err != nil {
+			log.Fatalln(err)
+		}
+		var dimg *image.RGBA = image.NewRGBA(img.Bounds())
+		for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
+			for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
+				r, g, b, a := img.At(x, y).RGBA()
+				newAlpha := uint8(float64(a>>8) * alphaInactive)
+				dimg.Set(x, y, color.RGBA{uint8(r >> 8), uint8(g >> 8), uint8(b >> 8), newAlpha})
+			}
+		}
+		var c bytes.Buffer
+		png.Encode(&c, dimg)
+		return c.Bytes()
+	}
+	
 	return b
-
 }
 
 func setIcon(iconName string, color string, configFile string, settings *AppSettings, active ...bool) {
-	systray.SetIcon(getIcon(iconName, len(active) != 0 && active[0], color))
+	isActive := len(active) != 0 && active[0]
+	var iconData []byte
+	if isActive && color != "" {
+		iconData = getTrayIcon(iconName, true, color)
+		systray.SetIcon(iconData)
+	} else {
+		iconData = getTrayIcon(iconName, isActive, "")
+		systray.SetTemplateIcon(iconData, iconData)
+	}
 	if configFile != "" {
-
 		*settings = AppSettings{iconName, color}
-		fh, _ := os.Create(configFile)
+		fh, err := os.Create(configFile)
+		if err != nil {
+			log.Errorf("Failed to create config file: %v", err)
+			return
+		}
 		defer fh.Close()
-
 		encoder := json.NewEncoder(fh)
 		encoder.Encode(settings)
 	}
@@ -125,16 +178,20 @@ func onReady() {
 
 		icons := systray.AddMenuItem("Icons", "icon of the app")
 		mouse := icons.AddSubMenuItem("Mouse", "Mouse icon")
-
-		mouse.SetIcon(getIcon("mouse", false, ""))
+		mouseIcon := getMenuIcon("mouse")
+		mouse.SetTemplateIcon(mouseIcon, mouseIcon)
 		cloud := icons.AddSubMenuItem("Cloud", "Cloud icon")
-		cloud.SetIcon(getIcon("cloud", false, ""))
+		cloudIcon := getMenuIcon("cloud")
+		cloud.SetTemplateIcon(cloudIcon, cloudIcon)
 		man := icons.AddSubMenuItem("Man", "Man icon")
-		man.SetIcon(getIcon("man", false, ""))
+		manIcon := getMenuIcon("man")
+		man.SetTemplateIcon(manIcon, manIcon)
 		geometric := icons.AddSubMenuItem("Geometric", "Geometric")
-		geometric.SetIcon(getIcon("geometric", false, ""))
+		geometricIcon := getMenuIcon("geometric")
+		geometric.SetTemplateIcon(geometricIcon, geometricIcon)
 
 		colors := systray.AddMenuItem("Icon Colors", "")
+		system := colors.AddSubMenuItem("System", "System default color")
 		blue := colors.AddSubMenuItem("Blue 🔵", "Blue")
 		white := colors.AddSubMenuItem("White ⚪️", "White")
 		red := colors.AddSubMenuItem("Red 🔴", "Red")
@@ -179,6 +236,8 @@ func onReady() {
 				setIcon("man", settings.Color, configFile, &settings, ammStart.Disabled())
 			case <-geometric.ClickedCh:
 				setIcon("geometric", settings.Color, configFile, &settings, ammStart.Disabled())
+			case <-system.ClickedCh:
+				setIcon(settings.Icon, "", configFile, &settings, ammStart.Disabled())
 			case <-blue.ClickedCh:
 				setIcon(settings.Icon, "blue", configFile, &settings, ammStart.Disabled())
 			case <-red.ClickedCh:
