@@ -69,7 +69,7 @@ func getMenuIcon(iconName string) []byte {
 
 func getTrayIcon(iconName string, active bool, col string) []byte {
 	b := loadIconFile(iconName)
-	
+
 	if active && col != "" {
 		img, err := png.Decode(bytes.NewReader(b))
 		if err != nil {
@@ -81,12 +81,12 @@ func getTrayIcon(iconName string, active bool, col string) []byte {
 				r, g, b, a := img.At(x, y).RGBA()
 				if a != 0 {
 					switch col {
-						case "white":
-							dimg.Set(x, y, colorWhite)
-						case "red":
-							dimg.Set(x, y, colorRed)
-						default:
-							dimg.Set(x, y, colorBlue)
+					case "white":
+						dimg.Set(x, y, colorWhite)
+					case "red":
+						dimg.Set(x, y, colorRed)
+					default:
+						dimg.Set(x, y, colorBlue)
 					}
 				} else {
 					dimg.Set(x, y, color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)})
@@ -97,7 +97,7 @@ func getTrayIcon(iconName string, active bool, col string) []byte {
 		png.Encode(&c, dimg)
 		return c.Bytes()
 	}
-	
+
 	if !active {
 		img, err := png.Decode(bytes.NewReader(b))
 		if err != nil {
@@ -115,7 +115,7 @@ func getTrayIcon(iconName string, active bool, col string) []byte {
 		png.Encode(&c, dimg)
 		return c.Bytes()
 	}
-	
+
 	return b
 }
 
@@ -246,7 +246,7 @@ func onReady() {
 				setIcon(settings.Icon, "white", configFile, &settings, ammStart.Disabled())
 			case <-about.ClickedCh:
 				log.Infof("Requesting about")
-				robotgo.Alert("Automatic-mouse-mover app v1.3.3", "Created by Prashant Gupta. \n\nMore info at: https://github.com/resousse/automatic-mouse-mover", "OK", "")
+				robotgo.Alert("Automatic-mouse-mover app v1.4", "Created by Prashant Gupta. \n\nMore info at: https://github.com/resousse/automatic-mouse-mover", "OK", "")
 			}
 		}
 
