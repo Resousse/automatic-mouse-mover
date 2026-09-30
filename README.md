@@ -19,9 +19,9 @@ This application has been initially created by **@prashantgupta24**, but he won'
   - [Work from home benefit](#work-from-home-benefit)
 - [Demo](#demo)
 - [How to install](#how-to-install)
-  - [Method 1: Install from the Releases page](#method-1-install-from-the-releases-page)
-  - [Method 2: Install with Homebrew](#method-2-install-with-homebrew)
-  - [Install from source](#install-from-source)
+  - [Method 1: Install with Homebrew](#method-1-install-with-homebrew)
+  - [Method 2: Install from the Releases page](#method-2-install-from-the-releases-page)
+  - [Method 3: Install from source](#method-3-install-from-source)
 - [Granting access for moving the mouse cursor](#granting-access-for-moving-the-mouse-cursor)
 - [How it works](#how-it-works)
 
@@ -55,21 +55,7 @@ You just click on `Start`, and AMM will take care of moving your mouse whenever 
 
 ## How to install
 
-### Method 1: Install from the Releases page
-
-1. Download the latest `amm.app.zip` from the [releases](https://github.com/Resousse/automatic-mouse-mover/releases) page, unzip it, and copy the .app to your `Applications` folder like any other application.
-
-1. Since the application is not notarized, macOS flags it with a quarantine attribute and may refuse to open it (e.g. saying the app "is damaged and can't be opened"). Remove the quarantine attribute by running the following command in a terminal:
-
-   ```sh
-   xattr -dr com.apple.quarantine /Applications/amm.app
-   ```
-
-   > If you are paranoid (fair enough, you don't really know me that well) then you can skip to the section which builds the app from source. That way you can see what exactly the app does (You can check that the application makes no connections to the internet whatsoever).
-
-1. Double click on the app. You might encounter an initial `Access request` which I've discussed in the [next section](#granting-access-for-moving-the-mouse-cursor).
-
-### Method 2: Install with Homebrew
+### Method 1: Install with Homebrew
 
 If you use [Homebrew](https://brew.sh), you can install the app with a single command:
 
@@ -79,7 +65,21 @@ brew install --cask resousse/tap/automatic-mouse-mover
 
 The app is installed in your `Applications` folder. On first launch, you might encounter an initial `Access request` which I've discussed in the [next section](#granting-access-for-moving-the-mouse-cursor).
 
-### Install from source
+### Method 2: Install from the Releases page
+
+1. Download the latest `amm.app.zip` from the [releases](https://github.com/Resousse/automatic-mouse-mover/releases) page, unzip it, and copy the .app to your `Applications` folder like any other application.
+
+1. Since the application is not notarized, macOS flags it with a quarantine attribute and may refuse to open it (e.g. saying the app "is damaged and can't be opened"). Remove the quarantine attribute by running the following command in a terminal:
+
+   ```sh
+   xattr -dr com.apple.quarantine /Applications/amm.app
+   ```
+
+   > If you are paranoid (fair enough, you don't really know me that well) then you can use [Method 3](#method-3-install-from-source) to build the app from source. That way you can see what exactly the app does (You can check that the application makes no connections to the internet whatsoever).
+
+1. Double click on the app. You might encounter an initial `Access request` which I've discussed in the [next section](#granting-access-for-moving-the-mouse-cursor).
+
+### Method 3: Install from source
 
 Make sure you have `go` installed. Once that is done, clone this repo and run `Make`, it should create the `amm.app` and open the folder where it was built for you. Copy the .app to your `Applications` folder like any other application.
 
